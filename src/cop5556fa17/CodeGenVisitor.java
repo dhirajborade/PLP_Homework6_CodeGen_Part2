@@ -460,6 +460,12 @@ public class CodeGenVisitor implements ASTVisitor, Opcodes {
 		case BOOLEAN:
 			mv.visitFieldInsn(PUTSTATIC, className, lhs.name, "Z");
 			break;
+		case IMAGE:
+			mv.visitFieldInsn(GETSTATIC, className, lhs.name, ImageSupport.ImageDesc);
+			mv.visitFieldInsn(GETSTATIC, className, "x", "I");
+			mv.visitFieldInsn(GETSTATIC, className, "y", "I");
+			mv.visitMethodInsn(INVOKESTATIC, ImageFrame.className, "setFrame", ImageSupport.setPixelSig, false);
+			break;
 		default:
 			throw new UnsupportedOperationException();
 		}
@@ -475,8 +481,9 @@ public class CodeGenVisitor implements ASTVisitor, Opcodes {
 
 	@Override
 	public Object visitSink_Ident(Sink_Ident sink_Ident, Object arg) throws Exception {
-		// TODO HW6
-		throw new UnsupportedOperationException();
+		mv.visitFieldInsn(GETSTATIC, className, sink_Ident.name, ImageSupport.StringDesc);
+		mv.visitMethodInsn(INVOKESTATIC, ImageSupport.className, "write", ImageSupport.StringDesc, false);
+		return null;
 	}
 
 	@Override
