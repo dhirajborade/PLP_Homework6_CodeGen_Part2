@@ -86,7 +86,7 @@ public class CodeGenVisitor implements ASTVisitor, Opcodes {
 		Label mainStart = new Label();
 		mv.visitLabel(mainStart);
 		// if GRADE, generates code to add string to log
-		//CodeGenUtils.genLog(GRADE, mv, "entering main");
+		// CodeGenUtils.genLog(GRADE, mv, "entering main");
 
 		// visit decs and statements to add field to class
 		// and instructions to main method, respectivley
@@ -96,7 +96,7 @@ public class CodeGenVisitor implements ASTVisitor, Opcodes {
 		}
 
 		// generates code to add string to log
-		//CodeGenUtils.genLog(GRADE, mv, "leaving main");
+		// CodeGenUtils.genLog(GRADE, mv, "leaving main");
 
 		// adds the required (by the JVM) return statement to main
 		mv.visitInsn(RETURN);
@@ -332,7 +332,7 @@ public class CodeGenVisitor implements ASTVisitor, Opcodes {
 
 	@Override
 	public Object visitSource_Ident(Source_Ident source_Ident, Object arg) throws Exception {
-		mv.visitLdcInsn(String.valueOf(source_Ident.name));
+		mv.visitFieldInsn(GETSTATIC, className, source_Ident.name, ImageSupport.StringDesc);
 		return null;
 	}
 
@@ -468,8 +468,9 @@ public class CodeGenVisitor implements ASTVisitor, Opcodes {
 
 	@Override
 	public Object visitSink_SCREEN(Sink_SCREEN sink_SCREEN, Object arg) throws Exception {
-		// TODO HW6
-		throw new UnsupportedOperationException();
+		mv.visitMethodInsn(INVOKESTATIC, ImageFrame.className, "makeFrame", ImageSupport.makeFrameSig, false);
+		mv.visitInsn(POP);
+		return null;
 	}
 
 	@Override
