@@ -285,7 +285,6 @@ public class ImageSupport {
 //			+ getPixel(image1,x,y) + ", was " + getPixel(image2,x,y) );
 ////				return false;
 			System.out.println("(x,y)=("+x+","+y+") " + getPixel(image1,x,y) + ", " + getPixel(image2,x,y));
-
 			}
 		}
 		return true;

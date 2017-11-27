@@ -275,8 +275,25 @@ public class CodeGenVisitor implements ASTVisitor, Opcodes {
 	// generate code to leave the two values on the stack
 	@Override
 	public Object visitIndex(Index index, Object arg) throws Exception {
-		// TODO HW6
-		throw new UnsupportedOperationException();
+		if (index.e0 != null) {
+			index.e0.visit(this, arg);
+		}
+		if (index.e1 != null) {
+			index.e1.visit(this, arg);
+		}
+		if (index.isCartesian()) {
+			return null;
+		}
+		mv.visitFieldInsn(GETSTATIC, className, "r", "I");
+		mv.visitFieldInsn(GETSTATIC, className, "a", "I");
+		mv.visitInsn(DUP2);
+		mv.visitMethodInsn(INVOKESTATIC, RuntimeFunctions.className, "cart_x", RuntimeFunctions.cart_xSig, false);
+		mv.visitInsn(DUP_X2);
+		mv.visitInsn(POP);
+		mv.visitMethodInsn(INVOKESTATIC, RuntimeFunctions.className, "cart_y", RuntimeFunctions.cart_ySig, false);
+		mv.visitFieldInsn(PUTSTATIC, className, "y", "I");
+		mv.visitFieldInsn(PUTSTATIC, className, "x", "I");
+		return null;
 	}
 
 	@Override
@@ -366,8 +383,18 @@ public class CodeGenVisitor implements ASTVisitor, Opcodes {
 	@Override
 	public Object visitExpression_PredefinedName(Expression_PredefinedName expression_PredefinedName, Object arg)
 			throws Exception {
-		// TODO HW6
-		throw new UnsupportedOperationException();
+		mv.visitFieldInsn(GETSTATIC, className, "x", "I");
+		mv.visitFieldInsn(GETSTATIC, className, "y", "I");
+		mv.visitFieldInsn(GETSTATIC, className, "X", "I");
+		mv.visitFieldInsn(GETSTATIC, className, "Y", "I");
+		mv.visitFieldInsn(GETSTATIC, className, "r", "I");
+		mv.visitFieldInsn(GETSTATIC, className, "a", "I");
+		mv.visitFieldInsn(GETSTATIC, className, "R", "I");
+		mv.visitFieldInsn(GETSTATIC, className, "A", "I");
+		mv.visitFieldInsn(GETSTATIC, className, "Z", "I");
+		mv.visitFieldInsn(GETSTATIC, className, "DEF_X", "I");
+		mv.visitFieldInsn(GETSTATIC, className, "DEF_Y", "I");
+		return null;
 	}
 
 	/**
@@ -437,12 +464,10 @@ public class CodeGenVisitor implements ASTVisitor, Opcodes {
 	 * In HW5, only handle INTEGER and BOOLEAN types.
 	 */
 
-	// @Override
-	// public Object visitStatement_Transform(Statement_Assign statement_Assign,
-	// Object arg) throws Exception {
-	// // TODO (see comment)
-	// throw new UnsupportedOperationException();
-	// }
+	public Object visitStatement_Transform(Statement_Assign statement_Assign, Object arg) throws Exception {
+		// TODO (see comment)
+		throw new UnsupportedOperationException();
+	}
 
 	/**
 	 * In HW5, only handle INTEGER and BOOLEAN types.
@@ -464,7 +489,7 @@ public class CodeGenVisitor implements ASTVisitor, Opcodes {
 			mv.visitFieldInsn(GETSTATIC, className, lhs.name, ImageSupport.ImageDesc);
 			mv.visitFieldInsn(GETSTATIC, className, "x", "I");
 			mv.visitFieldInsn(GETSTATIC, className, "y", "I");
-			mv.visitMethodInsn(INVOKESTATIC, ImageFrame.className, "setFrame", ImageSupport.setPixelSig, false);
+			mv.visitMethodInsn(INVOKESTATIC, ImageSupport.className, "setPixel", ImageSupport.setPixelSig, false);
 			break;
 		default:
 			throw new UnsupportedOperationException();
