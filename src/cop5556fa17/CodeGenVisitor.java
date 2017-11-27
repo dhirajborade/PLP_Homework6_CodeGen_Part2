@@ -86,7 +86,7 @@ public class CodeGenVisitor implements ASTVisitor, Opcodes {
 		Label mainStart = new Label();
 		mv.visitLabel(mainStart);
 		// if GRADE, generates code to add string to log
-		CodeGenUtils.genLog(GRADE, mv, "entering main");
+		//CodeGenUtils.genLog(GRADE, mv, "entering main");
 
 		// visit decs and statements to add field to class
 		// and instructions to main method, respectivley
@@ -96,7 +96,7 @@ public class CodeGenVisitor implements ASTVisitor, Opcodes {
 		}
 
 		// generates code to add string to log
-		CodeGenUtils.genLog(GRADE, mv, "leaving main");
+		//CodeGenUtils.genLog(GRADE, mv, "leaving main");
 
 		// adds the required (by the JVM) return statement to main
 		mv.visitInsn(RETURN);
@@ -236,7 +236,6 @@ public class CodeGenVisitor implements ASTVisitor, Opcodes {
 		default:
 			throw new UnsupportedOperationException();
 		}
-		CodeGenUtils.genLogTOS(GRADE, mv, expression_Binary.getNodeType());
 		return null;
 	}
 
@@ -270,7 +269,6 @@ public class CodeGenVisitor implements ASTVisitor, Opcodes {
 		default:
 			throw new UnsupportedOperationException();
 		}
-		CodeGenUtils.genLogTOS(GRADE, mv, expression_Unary.getNodeType());
 		return null;
 	}
 
@@ -306,8 +304,6 @@ public class CodeGenVisitor implements ASTVisitor, Opcodes {
 			expression_Conditional.trueExpression.visit(this, arg);
 		}
 		mv.visitLabel(argTwo);
-		// CodeGenUtils.genLogTOS(GRADE, mv,
-		// expression_Conditional.trueExpression.getNodeType());
 		return null;
 	}
 
@@ -320,7 +316,8 @@ public class CodeGenVisitor implements ASTVisitor, Opcodes {
 	@Override
 	public Object visitSource_StringLiteral(Source_StringLiteral source_StringLiteral, Object arg) throws Exception {
 		// TODO HW6
-		throw new UnsupportedOperationException();
+		mv.visitLdcInsn(String.valueOf(source_StringLiteral.fileOrUrl));
+		return null;
 	}
 
 	@Override
@@ -350,7 +347,6 @@ public class CodeGenVisitor implements ASTVisitor, Opcodes {
 	@Override
 	public Object visitExpression_IntLit(Expression_IntLit expression_IntLit, Object arg) throws Exception {
 		mv.visitLdcInsn(Integer.valueOf(expression_IntLit.value));
-		CodeGenUtils.genLogTOS(GRADE, mv, Type.INTEGER);
 		return null;
 	}
 
@@ -393,6 +389,11 @@ public class CodeGenVisitor implements ASTVisitor, Opcodes {
 			mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "print", "(I)V", false);
 			break;
 		case BOOLEAN:
+			mv.visitFieldInsn(GETSTATIC, className, statement_Out.name, "Z");
+			CodeGenUtils.genLogTOS(GRADE, mv, statement_Out.getDec().getNodeType());
+			mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "print", "(Z)V", false);
+			break;
+		case IMAGE:
 			mv.visitFieldInsn(GETSTATIC, className, statement_Out.name, "Z");
 			CodeGenUtils.genLogTOS(GRADE, mv, statement_Out.getDec().getNodeType());
 			mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "print", "(Z)V", false);
@@ -481,7 +482,6 @@ public class CodeGenVisitor implements ASTVisitor, Opcodes {
 	@Override
 	public Object visitExpression_BooleanLit(Expression_BooleanLit expression_BooleanLit, Object arg) throws Exception {
 		mv.visitLdcInsn(Boolean.valueOf(expression_BooleanLit.value));
-		CodeGenUtils.genLogTOS(GRADE, mv, Type.BOOLEAN);
 		return null;
 	}
 
@@ -498,7 +498,6 @@ public class CodeGenVisitor implements ASTVisitor, Opcodes {
 		default:
 			throw new UnsupportedOperationException();
 		}
-		CodeGenUtils.genLogTOS(GRADE, mv, expression_Ident.getNodeType());
 		return null;
 	}
 

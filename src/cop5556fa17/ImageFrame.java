@@ -44,18 +44,16 @@ public class ImageFrame {
 
 	public static final JFrame makeFrame(BufferedImage image) throws InvocationTargetException, InterruptedException {
 		JFrame frame = new JFrame();
-	    frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-    frame.setSize(image.getWidth() , image.getHeight());
-    JLabel label = new JLabel(new ImageIcon(image));
-    frame.add(label);
-    frame.pack();
-    SwingUtilities.invokeAndWait(new Runnable() {
-        public void run() {
-        	frame.setVisible(true);
-        }
-    });
-    return frame;
+		frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		frame.setSize(image.getWidth(), image.getHeight());
+		JLabel label = new JLabel(new ImageIcon(image));
+		frame.add(label);
+		frame.pack();
+		SwingUtilities.invokeAndWait(new Runnable() {
+			public void run() {
+				frame.setVisible(true);
+			}
+		});
+		return frame;
 	}
-
-
 }
