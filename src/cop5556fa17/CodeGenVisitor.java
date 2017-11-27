@@ -315,7 +315,6 @@ public class CodeGenVisitor implements ASTVisitor, Opcodes {
 
 	@Override
 	public Object visitSource_StringLiteral(Source_StringLiteral source_StringLiteral, Object arg) throws Exception {
-		// TODO HW6
 		mv.visitLdcInsn(String.valueOf(source_StringLiteral.fileOrUrl));
 		return null;
 	}
@@ -333,8 +332,8 @@ public class CodeGenVisitor implements ASTVisitor, Opcodes {
 
 	@Override
 	public Object visitSource_Ident(Source_Ident source_Ident, Object arg) throws Exception {
-		// TODO HW6
-		throw new UnsupportedOperationException();
+		mv.visitLdcInsn(String.valueOf(source_Ident.name));
+		return null;
 	}
 
 	@Override
