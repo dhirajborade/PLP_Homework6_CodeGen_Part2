@@ -5,7 +5,7 @@ import cop5556fa17.Scanner.Token;
 
 public class Expression_FunctionAppWithIndexArg extends Expression_FunctionApp {
 
-	public final Kind function;
+	private final Kind function;
 	public final Index arg;
 
 	@Override
@@ -17,6 +17,13 @@ public class Expression_FunctionAppWithIndexArg extends Expression_FunctionApp {
 		super(firstToken);
 		this.function = function;
 		this.arg = arg;
+	}
+
+	/**
+	 * @return the function
+	 */
+	public Kind getFunction() {
+		return function;
 	}
 
 	@Override

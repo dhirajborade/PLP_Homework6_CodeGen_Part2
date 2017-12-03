@@ -5,13 +5,20 @@ import cop5556fa17.Scanner.Token;
 
 public class Expression_FunctionAppWithExprArg extends Expression_FunctionApp {
 
-	public final Kind function;
+	private final Kind function;
 	public final Expression arg;
 
 	public Expression_FunctionAppWithExprArg(Token firstToken, Kind function, Expression arg) {
 		super(firstToken);
 		this.function = function;
 		this.arg = arg;
+	}
+
+	/**
+	 * @return the function
+	 */
+	public Kind getFunction() {
+		return function;
 	}
 
 	@Override

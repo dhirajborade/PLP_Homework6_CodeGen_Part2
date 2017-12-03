@@ -156,7 +156,7 @@ public class CodeGenVisitorTest implements ImageResources {
 		runCode(prog, bytecode, commandLineArgs);
 		BufferedImage imageRef = ImageSupport.makeConstantImage(0xFF0000, 512, 512);
 		BufferedImage image = RuntimeLog.globalImageLog.get(0);
-		ImageSupport.compareImages(imageRef, image);
+		assertTrue(ImageSupport.compareImages(imageRef, image));
 		keepFrame();
 	}
 
@@ -174,9 +174,9 @@ public class CodeGenVisitorTest implements ImageResources {
 		byte[] bytecode = genCode(input);
 		String[] commandLineArgs = {};
 		runCode(prog, bytecode, commandLineArgs);
-		BufferedImage imageRef = ImageSupport.makeConstantImage(0xFF0000, 256, 256);
+		BufferedImage imageRef = ImageSupport.makeConstantImage(0x00FF00, 256, 256);
 		BufferedImage image = RuntimeLog.globalImageLog.get(0);
-		ImageSupport.compareImages(imageRef, image);
+		assertTrue(ImageSupport.compareImages(imageRef, image));
 		keepFrame();
 	}
 
@@ -372,4 +372,5 @@ public class CodeGenVisitorTest implements ImageResources {
 		System.out.println("Z=" + 0xFFFFFF);
 		assertEquals(Z + ";256;256;", RuntimeLog.getGlobalString());
 	}
+
 }
