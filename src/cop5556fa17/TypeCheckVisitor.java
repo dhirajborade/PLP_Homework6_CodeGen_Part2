@@ -231,11 +231,11 @@ public class TypeCheckVisitor implements ASTVisitor {
 	public Object visitSource_StringLiteral(Source_StringLiteral source_StringLiteral, Object arg) throws Exception {
 		try {
 			new URL(source_StringLiteral.fileOrUrl).toURI();
-			source_StringLiteral.nodeType = Type.URL;
+			source_StringLiteral.setNodeType(Type.URL);
 		} catch (URISyntaxException exception) {
-			source_StringLiteral.nodeType = Type.FILE;
+			source_StringLiteral.setNodeType(Type.FILE);
 		} catch (MalformedURLException exception) {
-			source_StringLiteral.nodeType = Type.FILE;
+			source_StringLiteral.setNodeType(Type.FILE);
 		}
 		return source_StringLiteral;
 	}
@@ -246,8 +246,8 @@ public class TypeCheckVisitor implements ASTVisitor {
 		if (source_CommandLineParam.paramNum != null) {
 			source_CommandLineParam.paramNum.visit(this, null);
 		}
-		source_CommandLineParam.nodeType = source_CommandLineParam.paramNum.getNodeType();
-		if (source_CommandLineParam.nodeType != Type.INTEGER) {
+		source_CommandLineParam.setNodeType(null);
+		if (source_CommandLineParam.paramNum.getNodeType() != Type.INTEGER) {
 			String message = "Visit Source Command Line Parameter";
 			throw new SemanticException(source_CommandLineParam.firstToken, message);
 		}
@@ -260,8 +260,8 @@ public class TypeCheckVisitor implements ASTVisitor {
 			String message = "Visit Source Identifier";
 			throw new SemanticException(source_Ident.firstToken, message);
 		}
-		source_Ident.nodeType = symTab.getNode(source_Ident.name).getNodeType();
-		if (!(source_Ident.nodeType == Type.FILE || source_Ident.nodeType == Type.URL)) {
+		source_Ident.setNodeType(symTab.getNode(source_Ident.name).getNodeType());
+		if (!(source_Ident.getNodeType() == Type.FILE || source_Ident.getNodeType() == Type.URL)) {
 			String message = "Source Ident Type in Visit Source Identifier is not a File or URL";
 			throw new SemanticException(source_Ident.firstToken, message);
 		}
@@ -289,7 +289,10 @@ public class TypeCheckVisitor implements ASTVisitor {
 		default:
 			throw new SemanticException(declaration_SourceSink.firstToken, message);
 		}
-		if (declaration_SourceSink.getNodeType() != declaration_SourceSink.source.nodeType) {
+		if (declaration_SourceSink.getNodeType() == declaration_SourceSink.source.getNodeType()
+				|| declaration_SourceSink.getNodeType() == null) {
+
+		} else {
 			throw new SemanticException(declaration_SourceSink.firstToken, message);
 		}
 		return declaration_SourceSink;
@@ -376,7 +379,9 @@ public class TypeCheckVisitor implements ASTVisitor {
 		if (statement_Assign.e != null) {
 			statement_Assign.e.visit(this, null);
 		}
-		if (statement_Assign.lhs.getNodeType() == statement_Assign.e.getNodeType() || (statement_Assign.lhs.getNodeType() == Type.IMAGE && statement_Assign.e.getNodeType() == Type.INTEGER)) {
+		if (statement_Assign.lhs.getNodeType() == statement_Assign.e.getNodeType()
+				|| (statement_Assign.lhs.getNodeType() == Type.IMAGE
+						&& statement_Assign.e.getNodeType() == Type.INTEGER)) {
 			statement_Assign.setCartesian(statement_Assign.lhs.isCartesian);
 		} else {
 			String message = "Visit Statement Assignment";
